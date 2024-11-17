@@ -1,26 +1,4 @@
-<!doctype html>
-<html lang="en">
-   <head>
-      <!-- Required meta tags -->
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <meta name="description" content="Askbootstrap">
-      <meta name="author" content="Askbootstrap">
-      <title>User Dashboard - Online Food Ordering Website</title>
-      <!-- Favicon Icon -->
-      <link rel="icon" type="image/png" href="{{ asset('frontend/img/favicon.png') }}">
-      <!-- Bootstrap core CSS-->
-      <link href="{{ asset('frontend/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-      <!-- Font Awesome-->
-      <link href="{{ asset('frontend/vendor/fontawesome/css/all.min.css') }}" rel="stylesheet">
-      <!-- Font Awesome-->
-      <link href="{{ asset('frontend/vendor/icofont/icofont.min.css') }}" rel="stylesheet">
-      <!-- Select2 CSS-->
-      <link href="{{ asset('frontend/vendor/select2/css/select2.min.css') }}" rel="stylesheet">
-      <!-- Custom styles for this template-->
-      <link href="{{ asset('frontend/css/osahan.css') }}" rel="stylesheet">
-   </head>
-   <body>
+
 
       <nav class="navbar navbar-expand-lg navbar-light bg-light osahan-nav shadow-sm">
          <div class="container">
@@ -42,6 +20,8 @@
                      </a>
                   </li>
 
+@auth
+
 @php
 $id = Auth::user()->id;
 $profileData = App\Models\User::find($id);
@@ -53,10 +33,25 @@ $profileData = App\Models\User::find($id);
                      class="nav-osahan-pic rounded-pill"> My Account
                      </a>
                      <div class="dropdown-menu dropdown-menu-right shadow-sm border-0">
-                        <a class="dropdown-item" href="{{ route('dashboard') }}"><i class="icofont-food-cart"></i> Dashboard</a>
+                        <a class="dropdown-item" href="{{ route('dashboard') }}"><i class="icofont-food-cart"></i> My Profile</a>
                         <a class="dropdown-item" href="{{ route('user.logout') }}"><i class="icofont-sale-discount"></i>Logout</a>
+
                      </div>
                   </li>
+@else
+                  <li class="nav-item dropdown">
+                     <a class="nav-link" href="{{ route('login') }}" role="button" aria-haspopup="true" aria-expanded="false">
+                     Login
+                     </a>
+                  </li>
+                  <li class="nav-item dropdown">
+                     <a class="nav-link" href="{{ route('register') }}" role="button" aria-haspopup="true" aria-expanded="false">
+                     Register
+                     </a>
+                  </li>
+@endauth
+
+
                   <li class="nav-item dropdown dropdown-cart">
                      <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                      <i class="fas fa-shopping-basket"></i> Cart

@@ -118,13 +118,13 @@
                                 </div>
 
                                 <div class="form-check mt-2">
-                                    <input class="form-check-input" name="best_sellter" type="checkbox" id="formCheck2" value="1" >
+                                    <input class="form-check-input" name="best_seller" type="checkbox" id="formCheck2" value="1" >
                                     <label class="form-check-label" for="formCheck2">
-                                        Best Sellter
+                                        Best Seller
                                     </label>
                                 </div>
                                 <div class="form-check mt-2">
-                                    <input class="form-check-input" name="most_populer" type="checkbox" id="formCheck2" >
+                                    <input class="form-check-input" name="most_populer" type="checkbox" id="formCheck2" value="1">
                                     <label class="form-check-label" for="formCheck2">
                                         Most Populer
                                     </label>

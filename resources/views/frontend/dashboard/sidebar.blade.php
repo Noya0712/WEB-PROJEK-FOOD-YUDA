@@ -28,12 +28,12 @@
                            aria-controls="orders" aria-selected="true"><i class="icofont-food-cart"></i> Change Password</a>
                         </li>
                         <li class="nav-item">
-                           <a class="nav-link" id="offers-tab" data-toggle="tab" href="#offers" role="tab"
-                           aria-controls="offers" aria-selected="false"><i class="icofont-sale-discount"></i> Offers</a>
+                           <a class="nav-link {{ Route::currentRouteName() === 'all.wishlist' ? 'active' : '' }}" href="{{Route('all.wishlist')}}" role="tab"
+                           aria-controls="orders" aria-selected="true"><i class="icofont-food-cart"></i>Favourites</a>
                         </li>
                         <li class="nav-item">
-                           <a class="nav-link" id="favourites-tab" data-toggle="tab" href="#favourites" role="tab"
-                           aria-controls="favourites" aria-selected="false"><i class="icofont-heart"></i> Favourites</a>
+                           <a class="nav-link" id="offers-tab" data-toggle="tab" href="#offers" role="tab"
+                           aria-controls="offers" aria-selected="false"><i class="icofont-sale-discount"></i> Offers</a>
                         </li>
                         <li class="nav-item">
                            <a class="nav-link" id="payments-tab" data-toggle="tab" href="#payments" role="tab"

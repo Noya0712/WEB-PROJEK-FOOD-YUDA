@@ -298,7 +298,7 @@ class RestaurantController extends Controller
             $name_gen = hexdec(uniqid()).'.'.
             $gimg->getClientOriginalExtension();
             $img = $manager->read($gimg);
-            $img->resize(500,500)->save(public_path('upload/galery/'.
+            $img->resize(850,500)->save(public_path('upload/galery/'.
             $name_gen));
             $save_url = 'upload/galery/' .$name_gen;
 

@@ -1,5 +1,5 @@
-@extends('client.client_dashboard')
-@section('client')
+@extends('admin.admin_dashboard')
+@section('admin')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 <div class="page-content">
@@ -28,13 +28,13 @@
                 <div class="card">
 
                     <div class="card-body p-4">
-                        <form id="myForm" action="{{ route('product.update') }}" method="post" enctype="multipart/form-data">
+                        <form id="myForm" action="{{ route('admin.product.update') }}" method="post" enctype="multipart/form-data">
                             @csrf
 
                             <input type="hidden" name="id" value="{{ $product->id }}">
 
                             <div class="row">
-                                <div class="col-xl-4 col-md-6">
+                                <div class="col-xl-3 col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="example-text-input" class="form-label">Category Name</label>
                                             <select name="category_id" class="form-select">
@@ -47,7 +47,7 @@
                                         </div>
                                 </div>
 
-                                <div class="col-xl-4 col-md-6">
+                                <div class="col-xl-3 col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="example-text-input" class="form-label">Menu Name</label>
                                             <select name="menu_id" class="form-select">
@@ -60,7 +60,7 @@
                                         </div>
                                 </div>
 
-                                <div class="col-xl-4 col-md-6">
+                                <div class="col-xl-3 col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="example-text-input" class="form-label">City Name</label>
                                             <select name="city_id" class="form-select">
@@ -68,6 +68,19 @@
                                                 @foreach ($city as $cit)
                                                 <option value="{{ $cit->id }}" {{ $cit->id == $product->city_id ? 'selected' : '' }}>
                                                     {{ $cit->city_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                </div>
+
+                                <div class="col-xl-3 col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label for="example-text-input" class="form-label">Client Name</label>
+                                            <select name="client_id" class="form-select">
+                                                <option>Select</option>
+                                                @foreach ($client as $clie)
+                                                <option value="{{ $clie->id }}" {{ $clie->id == $product->client_id ? 'selected' : '' }}>
+                                                    {{ $clie->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -123,13 +136,13 @@
                                 </div>
 
                                 <div class="form-check mt-2">
-                                    <input class="form-check-input" name="best_seller" type="checkbox" id="formCheck2" value="1" {{ $product->best_seller == 1 ? 'checked' : '' }} >
+                                    <input class="form-check-input" name="best_sellter" type="checkbox" id="formCheck2" value="1" {{ $product->best_seller == 1 ? 'checked' : '' }} >
                                     <label class="form-check-label" for="formCheck2">
-                                        Best Seller
+                                        Best Sellter
                                     </label>
                                 </div>
                                 <div class="form-check mt-2">
-                                    <input class="form-check-input" name="most_populer" type="checkbox" id="formCheck2" value="1" {{ $product->most_populer == 1 ? 'checked' : '' }}>
+                                    <input class="form-check-input" name="most_populer" type="checkbox" id="formCheck2" value="1" {{ $product->best_seller == 1 ? 'checked' : '' }}>
                                     <label class="form-check-label" for="formCheck2">
                                         Most Populer
                                     </label>

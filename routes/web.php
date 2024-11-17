@@ -8,6 +8,9 @@ use  App\Http\Controllers\UserController;
 use  App\Http\Controllers\Admin\CategoryController;
 use  App\Http\Controllers\Client\RestaurantController;
 use  App\Http\Controllers\Client\CouponController;
+use  App\Http\Controllers\Admin\ManageController;
+use  App\Http\Controllers\Frontend\HomeController;
+use  App\Http\Controllers\Frontend\CartController;
 
 
 //Route::get('/', function () {
@@ -17,14 +20,18 @@ use  App\Http\Controllers\Client\CouponController;
 Route::get('/', [UserController::class, 'index'])->name('index');
 
 Route::get('/dashboard', function () {
-    return view('frontend.dashboard.dashboard');
+    return view('frontend.dashboard.profile');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::post('/profile/store', [UserController::class, 'ProfileStore'])->name('profile.store');
     Route::get('/user/logout', [UserController::class, 'UserLogout'])->name('user.logout');
-    Route::get('change/password', [UserController::class, 'ChangePassword'])->name('change.password');
-    Route::post('user/password/update', [UserController::class, 'UserPasswordUpdate'])->name('user.password.update');
+    Route::get('/change/password', [UserController::class, 'ChangePassword'])->name('change.password');
+    Route::post('/user/password/update', [UserController::class, 'UserPasswordUpdate'])->name('user.password.update');
+
+    //////GET WISHLIST DATA FOR USER////////////
+    Route::get('/all/wishlist', [HomeController::class, 'AllWishlist'])->name('all.wishlist');
+    Route::get('/remove/wishlist/{id}', [HomeController::class, 'RemoveWishlist'])->name('remove.wishlist');
 });
 
 require __DIR__.'/auth.php';
@@ -42,8 +49,38 @@ Route::post('/admin/password_submit', [AdminController::class, 'AdminPasswordSub
 Route::get('/admin/reset-password/{token}/{email}', [AdminController::class, 'AdminResetPassword']);
 Route::post('/admin/reset_password_submit', [AdminController::class, 'AdminResetPasswordSubmit'])->name('admin.reset_password_submit');
 
+/////////MANAGE///////////
 
-//ALL ROUTE FOR CLIENT
+Route::controller(ManageController::class)->group(function(){
+    Route::get('/admin/all/product', 'AdminAllProduct')->name('admin.all.product');
+    Route::get('/admin/add/product', 'AdminAddProduct')->name('admin.add.product');
+    Route::post('/admin/store/product', 'AdminStoreProduct')->name('admin.product.store');
+    Route::get('/admin/edit/product/{id}', 'AdminEditProduct')->name('admin.edit.product');
+    Route::post('/admin/update/product', 'AdminUpdateProduct')->name('admin.product.update');
+    Route::get('/admin/delete/product/{id}', 'AdminDeleteProduct')->name('admin.delete.product');
+    
+});
+
+
+
+Route::controller(ManageController::class)->group(function(){
+    Route::get('/pending/restaurant', 'PendingRestaurant')->name('pending.restaurant');
+    Route::get('/clientchangeStatus', 'ClientChangeStatus');
+    Route::get('/approve/restaurant', 'ApproveRestaurant')->name('approve.restaurant');
+    
+});
+
+Route::controller(ManageController::class)->group(function(){
+    Route::get('/all/banner', 'AllBanner')->name('all.banner');
+    Route::post('/banner/store', 'BannerStore')->name('banner.store');
+    Route::get('/edit/banner/{id}', 'EditBanner');
+    Route::post('/banner/update', 'BannerUpdate')->name('banner.update');
+    Route::get('/delete/banner/{id}', 'DeleteBanner')->name('delete.banner');
+
+});
+
+
+//ALL ROUTE FOR CLIENT////////////
 
 Route::get('/client/login', [ClientController::class, 'ClientLogin'])->name('client.login');
 Route::get('/client/register', [ClientController::class, 'ClientRegister'])->name('client.register');
@@ -57,7 +94,7 @@ Route::get('client/change/password', [ClientController::class, 'ClientChangePass
 Route::post('client/password/update', [ClientController::class, 'ClientPasswordUpdate'])->name('client.password.update');
 
 
-//ALL ADMIN CATEGORY CONTROLLER
+///////////ALL ADMIN CATEGORY CONTROLLER//////////////
 
 Route::middleware('admin')->group(function () {
 
@@ -82,49 +119,69 @@ Route::controller(CategoryController::class)->group(function(){
 });
 //end admin middleware
 
-//ALL RESTAURANT MENU CONTROLLER
-Route::middleware(['client'])->group(function () {
+///////////ALL RESTAURANT MENU CONTROLLER////////////////
+Route::middleware(['client', 'status'])->group(function () {
+
+    Route::controller(RestaurantController::class)->group(function(){
+        Route::get('/all/menu', 'AllMenu')->name('all.menu');
+        Route::get('/add/menu', 'AddMenu')->name('add.menu');
+        Route::post('/store/menu', 'StoreMenu')->name('menu.store');
+        Route::get('/edit/menu/{id}', 'EditMenu')->name('edit.menu');
+        Route::post('/update/menu', 'UpdateMenu')->name('menu.update');
+        Route::get('/delete/menu/{id}', 'DeleteMenu')->name('delete.menu');
+    });
+    
+    //ALL PRODUCT
+    Route::controller(RestaurantController::class)->group(function(){
+        Route::get('/all/product', 'AllProduct')->name('all.product');
+        Route::get('/add/product', 'AddProduct')->name('add.product');
+        Route::post('/store/product', 'StoreProduct')->name('product.store');
+        Route::get('/edit/product/{id}', 'EditProduct')->name('edit.product');
+        Route::post('/update/product', 'UpdateProduct')->name('product.update');
+        Route::get('/delete/product/{id}', 'DeleteProduct')->name('delete.product');
+        
+    });
+    
+    
+    //ALL GALERY//
+    Route::controller(RestaurantController::class)->group(function(){
+        Route::get('/all/galery', 'AllGalery')->name('all.galery');
+        Route::get('/add/galery', 'AddGalery')->name('add.galery');
+        Route::post('/store/galery', 'StoreGalery')->name('galery.store');
+        Route::get('/edit/galery/{id}', 'EditGalery')->name('edit.galery');
+        Route::post('/update/galery', 'UpdateGalery')->name('galery.update');
+        Route::get('/delete/galery/{id}', 'DeleteGalery')->name('delete.galery');
+    });
+    
+    
+    //ALL Coupon//
+    Route::controller(CouponController::class)->group(function(){
+        Route::get('/all/coupon', 'AllCoupon')->name('all.coupon');
+        Route::get('/add/coupon', 'AddCoupon')->name('add.coupon');
+        Route::post('/store/coupon', 'StoreCoupon')->name('coupon.store');
+        Route::get('/edit/coupon/{id}', 'EditCoupon')->name('edit.coupon');
+        Route::post('/update/coupon', 'UpdateCoupon')->name('coupon.update');
+        Route::get('/delete/coupon/{id}', 'DeleteCoupon')->name('delete.coupon');
+    });
     
 });
 
-Route::controller(RestaurantController::class)->group(function(){
-    Route::get('/all/menu', 'AllMenu')->name('all.menu');
-    Route::get('/add/menu', 'AddMenu')->name('add.menu');
-    Route::post('/store/menu', 'StoreMenu')->name('menu.store');
-    Route::get('/edit/menu/{id}', 'EditMenu')->name('edit.menu');
-    Route::post('/update/menu', 'UpdateMenu')->name('menu.update');
-    Route::get('/delete/menu/{id}', 'DeleteMenu')->name('delete.menu');
+
+//////THAT WILL BE FOR ALL USER/////////////
+
+Route::get('/changeStatus', [RestaurantController::class, 'ChangeStatus']);
+
+
+Route::controller(HomeController::class)->group(function(){
+    Route::get('/restaurant/details/{id}', 'RestaurantDetails')->name('res.details');
+    Route::post('/add-wish-list/{id}', 'AddWishList');
 });
 
-//ALL PRODUCT
-Route::controller(RestaurantController::class)->group(function(){
-    Route::get('/all/product', 'AllProduct')->name('all.product');
-    Route::get('/add/product', 'AddProduct')->name('add.product');
-    Route::post('/store/product', 'StoreProduct')->name('product.store');
-    Route::get('/edit/product/{id}', 'EditProduct')->name('edit.product');
-    Route::post('/update/product', 'UpdateProduct')->name('product.update');
-    Route::get('/delete/product/{id}', 'DeleteProduct')->name('delete.product');
-    Route::get('/changeStatus', 'ChangeStatus');
-});
+Route::controller(CartController::class)->group(function(){
+    Route::get('/add_to_cart/{id}', 'AddToCart')->name('add_to_cart');
+    Route::post('/cart/update-quantity', 'updateCartQuanity')->name('cart.updateQuantity');
+    Route::post('/cart/remove', 'CartRemove')->name('cart.remove');
+    Route::post('/apply-coupon', 'ApplyCoupon');
+    Route::get('/remove-coupon', 'CouponRemove');
 
-
-//ALL GALERY//
-Route::controller(RestaurantController::class)->group(function(){
-    Route::get('/all/galery', 'AllGalery')->name('all.galery');
-    Route::get('/add/galery', 'AddGalery')->name('add.galery');
-    Route::post('/store/galery', 'StoreGalery')->name('galery.store');
-    Route::get('/edit/galery/{id}', 'EditGalery')->name('edit.galery');
-    Route::post('/update/galery', 'UpdateGalery')->name('galery.update');
-    Route::get('/delete/galery/{id}', 'DeleteGalery')->name('delete.galery');
-});
-
-
-//ALL Coupon//
-Route::controller(CouponController::class)->group(function(){
-    Route::get('/all/coupon', 'AllCoupon')->name('all.coupon');
-    Route::get('/add/coupon', 'AddCoupon')->name('add.coupon');
-    Route::post('/store/coupon', 'StoreCoupon')->name('coupon.store');
-    Route::get('/edit/coupon/{id}', 'EditCoupon')->name('edit.coupon');
-    Route::post('/update/coupon', 'UpdateCoupon')->name('coupon.update');
-    Route::get('/delete/coupon/{id}', 'DeleteCoupon')->name('delete.coupon');
 });
